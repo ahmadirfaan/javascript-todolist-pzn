@@ -26,7 +26,7 @@
 <table>
     <thead>
     <tr>
-        <th>Filter: </th>
+        <th>Filter:</th>
         <th><input type="text" name="search" id="search"></th>
     </tr>
     </thead>
@@ -48,12 +48,17 @@
 
     function clearTodoList() {
         const todoListBody = document.getElementById("todoListBody");
-        while(todoListBody.firstChild) {
+        while (todoListBody.firstChild) {
             todoListBody.removeChild(todoListBody.firstChild)
         }
     }
 
-    function addTodoList(todo) {
+    function removeTodoList(index) {
+        todoList.splice(index, 1);
+        displayTodolist();
+    }
+
+    function addTodoList(index, todo) {
         const tr = document.createElement("tr");
         const tdButton = document.createElement("td");
         tr.appendChild(tdButton);
@@ -61,6 +66,9 @@
         const buttonDone = document.createElement("input");
         buttonDone.type = "button";
         buttonDone.value = "Done";
+        buttonDone.onclick = function () {
+            removeTodoList(index)
+        }
         tdButton.appendChild(buttonDone)
 
         const tdTodo = document.createElement("td");
@@ -78,7 +86,12 @@
         for (let i = 0; i < todoList.length; i++) {
             const todo = todoList[i];
 
-           addTodoList(todo)
+            const searchText = document.getElementById("search").value.toLowerCase();
+
+            if (todo.toLowerCase().includes(searchText)) {
+                addTodoList(i, todo)
+            }
+
         }
     }
 
@@ -98,11 +111,11 @@
     const searchInput = document.getElementById("search");
 
     searchInput.onkeyup = function () {
-        console.info("On Key Up")
+        displayTodolist()
     }
 
     searchInput.onkeydown = function () {
-        console.info("On Key Down")
+        displayTodolist()
     }
 
     displayTodolist();
